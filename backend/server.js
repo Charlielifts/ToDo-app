@@ -1,19 +1,20 @@
 import dotenv from "dotenv";
-dotenv.config();
-
 import express from "express";
 import cors from "cors";
 import todoRoutes from "./route/todo.route.js";
 import cookieParser from "cookie-parser"
-import pool from "./config/db.js";
+import authRoutes from "./route/auth.route.js";
+import protectedRoutes from "./route/protected.route.js";
 
-
+dotenv.config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use("/auth", authRoutes);
+app.use("/api", protectedRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running!");

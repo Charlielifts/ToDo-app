@@ -1,5 +1,34 @@
+import axios from "axios"
+import { use } from "react";
+import { useState } from "react"
 
 const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, seeCoPassword}) => {
+
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+
+        if (password !== confirmPassword) {
+            alert("Password do not match")
+            return;
+        }
+        try {
+            const res = await axios.post("http://localhost:5000/auth/login", {
+                username,
+                email,
+                password,
+            });
+            console.log(res.data);
+        } catch (err){
+            console.error(err);
+        }
+    };
+
+
  return ( 
     <div className={`absolute left-0 w-1/2 h-full flex items-center text-center p-15 z-30
     transition-all duration-600 delay-300
@@ -13,8 +42,10 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
 
             <div className={`relative my-6 transition-all duration-600 opacity-100 delay-250 ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0" }`}>
                 <input
-                    type="text"
+                    type="username"
                     placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className=" w-full py-3 pl-5 pr-10 bg-gray-300 rounded-full outline-none"
                 />
             </div>
@@ -23,6 +54,8 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
                 <input
                     type="email"
                     placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className=" w-full py-3 pl-5 pr-10 bg-gray-300 rounded-full outline-none"
 
                 />
@@ -32,6 +65,8 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
                 <input 
                     type= {showPassword ? "text" : "password"}
                     placeholder="Input your Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className=" w-full py-3 pl-5 pr-10 bg-gray-300 rounded-full outline-none" 
                 />
 
@@ -46,17 +81,22 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
                 <input 
                     type={seeCoPassword ? "text" : "Password"}
                     placeholder="Confirm your Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className=" w-full py-3 pl-5 pr-10 bg-gray-300 rounded-full outline-none" 
                 />
 
                 <button type="button" onClick={() => setSeeCoPassword(prev => !prev)}
                     className="absolute right-3 top-2/10 transform -transalate-y-1/2 cursor-pointer">
                     {seeCoPassword ? (<i class="fa-solid fa-eye"></i>) : <i class="fa-regular fa-eye-slash"></i>}
+
                 </button>
 
             </div>
 
-            <button className={`w-full py-3 pl-5 pr-10 bg-amber-500 rounded-full font-semibold hover:bg-amber-600 hover:scale-105 transition duration-300 cursor-pointer
+            <button 
+            onClick={handleRegister}
+            className={`w-full py-3 pl-5 pr-10 bg-amber-500 rounded-full font-semibold hover:bg-amber-600 hover:scale-105 transition duration-300 cursor-pointer
             duration-600 opacity-100 delay-50 ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0" }`}>
                 Register
             </button>
