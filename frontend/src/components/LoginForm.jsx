@@ -1,23 +1,26 @@
 import axios from "axios"
-import { useState } from "react"
+
+const Loginform = ({active, showPassword, setShowPassword, messageType, setMessageType, message, setMessage, username, setUsername, password, setPassword}) => {
 
 
-const Loginform = ({active, showPassword, setShowPassword}) => {
-
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
 
     const handlelogin = async (e) => {
         e.preventDefault();
 
         try { 
             const res = await axios.post("http://localhost:5000/auth/login", {
-            email,
+            username,
             password,
             });
-            console.log(res.data);  
+            console.log(res.data);
+            setMessageType("success");
+            setUsername("");
+            setPassword("");
+            console.log("MESSAGE SET:", res.data.message);
         } catch (err) {
             console.error(err.response?.data || err.message);
+            setMessage(err.response?.data?.message || "Something went wrong");
+            setMessageType("error");
         }
     };
 
@@ -26,7 +29,7 @@ const Loginform = ({active, showPassword, setShowPassword}) => {
         <div className={`absolute right-0 w-1/2 h-full flex items-center text-center p-15 z-30
         transition-all duration-600 delay-200
         ${active ? "`translate-x-full opacity-0" : "translate-x-0 opacity-100"}`}>
-            <form className="w-full">
+            <form className="w-full" onSubmit={handlelogin} >
                     <h1 className={`text-2xl font-Gummy font-bold mb-6 cursor-default
                     transition-all duration-600 opacity-100 delay-200 ${active ? "translate-x-full opacity-0" : "translate-x-0 opacity-100" }`}>
                         Log in
@@ -34,7 +37,7 @@ const Loginform = ({active, showPassword, setShowPassword}) => {
 
                 <div className={`relative my-6 transition-all duration-600 opacity-100 delay-150 ${active ? "translate-x-full opacity-0" : "translate-x-0 opacity-100" }`}>
                     < input
-                    type="username"
+                    type="text"
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -60,14 +63,19 @@ const Loginform = ({active, showPassword, setShowPassword}) => {
                 </div>
 
                 <button
-                onClick={handlelogin} 
+                type="submit"
                 className={`w-full h-12 bg-amber-500 text-black rounded-full font-semibold hover:bg-amber-600 hover:scale-105 transition 
                 duration-300 cursor-pointer transition-all duration-600 opacity-100 delay-50 
                 ${active ? "translate-x-full opacity-0" : "translate-x-0 opacity-100" }`} >
                     Log in
                 </button>
-
-            
+                    {message && (
+                    <p className={`mt-3 text-center text-sm font-semibold
+                        ${messageType === "success" ? "text-green-700" : "text-red-600"}`}
+                    >
+                        {messageType === "success" ? "🎉" : (<i className="fa-solid fa-exclamation-circle"></i>)} {message}
+                    </p>
+                    )}
              </form>
         </div>
     )

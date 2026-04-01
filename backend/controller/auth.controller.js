@@ -3,21 +3,30 @@ import jwt from "jsonwebtoken"
 import { createUser, finduserByEmail, finduserByUsername } from "../model/auth.model.js";
 
 export const registerController = async (req, res) => {
-
-    const { username, email, password } = req.body 
+    console.log(req.body);
+    const { username, email, password, } = req.body 
+    
 
     try {
+        //fill up fields
+        const{ username, email, password, } = req.body
+        if (!username || !email || !password) {
+            return res.status(400).json({message: "Please fill up all the following fields"});
+        }
+        
         //check user
         const existingUser = await finduserByEmail(email);
         if (existingUser) {
-            return res.status(400).json({message: "Email already exist" });
+            return res.status(400).json({ message: "Email already exist"});
         }
-        
-        const hashedPassword = await bcrypt.hash(password, 10);
-        //create user
-        const newUser = await createUser(username, email, password);
 
-        req.status(201).json({
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        console.log("CREATING USER...");
+        //create user
+        const newUser = await createUser(username, email, hashedPassword);
+
+        res.status(201).json({
             message: "User Created" ,
             user: newUser,
         });
@@ -32,8 +41,12 @@ export const loginController = async (req, res) => {
     const{ username,password } = req.body
 
     try {
+        //fill up fields
+        if (!username || !password) {
+            return res.status(400).json({message: "Please fill up all the following fields"});
+        }
         //find user
-        const user = finduserByUsername = await finduserByUsername(username);
+        const user = await finduserByUsername(username);
         if(!user) {
             return res.status(400).json({message: "Invalid Username"})
         }
@@ -41,13 +54,17 @@ export const loginController = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch) {
             return res.status(400).json({message: "The password you entered is incorrect"})
+        }   
+        if (!user || !isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
+        
         }
         const token = jwt.sign(
             { id: user.id },
             process.env.JWT_SECRET,  
             { expiresIn: "1h" }
         );
-        req.json({
+        res.json({
             message: "Login sucessfull",
             token,
             user: {

@@ -1,30 +1,39 @@
-import axios from "axios"
-import { use } from "react";
-import { useState } from "react"
+import axios from "axios";
+import { useState } from "react";
 
-const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, seeCoPassword}) => {
+const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, seeCoPassword, messageType, setMessageType, 
+     message, setMessage, username, setUsername, password, setPassword}) => {
 
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    
 
     const handleRegister = async (e) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            alert("Password do not match")
+            setMessage("Password do not match")
+            setMessageType("error")
             return;
         }
         try {
-            const res = await axios.post("http://localhost:5000/auth/login", {
+            console.log("Sending:", username, email, password);
+            const res = await axios.post("http://localhost:5000/auth/register", {
                 username,
                 email,
                 password,
             });
-            console.log(res.data);
-        } catch (err){
-            console.error(err);
+            setMessage(res.data.message);
+            setMessageType("success");
+            setUsername("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+            console.log("MESSAGE SET:", res.data.message);
+        } catch (err) {
+         console.error(err.response?.data || err.message);
+        setMessage(err.response?.data?.message || "Something went wrong");
+        setMessageType("error");
         }
     };
 
@@ -33,7 +42,7 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
     <div className={`absolute left-0 w-1/2 h-full flex items-center text-center p-15 z-30
     transition-all duration-600 delay-300
     ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}`}>
-        <form className="w-full">
+        <form className="w-full" onSubmit={handleRegister}>
                 <h1 className={`text-3xl font-Gummy font-bold mb-6 cursor-default 
                 transition-all duration-700 delay-300
                 ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}`}>
@@ -42,7 +51,7 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
 
             <div className={`relative my-6 transition-all duration-600 opacity-100 delay-250 ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0" }`}>
                 <input
-                    type="username"
+                    type="text"
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -52,7 +61,7 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
 
             <div className={`relative my-6 transition-all duration-600 opacity-100 delay-200 ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0" }`}>
                 <input
-                    type="email"
+                    type="text"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -79,7 +88,7 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
 
             <div className={`relative my-6 transition-all duration-600 opacity-100 delay-100 ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0" }`}>
                 <input 
-                    type={seeCoPassword ? "text" : "Password"}
+                    type={seeCoPassword ? "text" : "password"}
                     placeholder="Confirm your Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -87,7 +96,7 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
                 />
 
                 <button type="button" onClick={() => setSeeCoPassword(prev => !prev)}
-                    className="absolute right-3 top-2/10 transform -transalate-y-1/2 cursor-pointer">
+                    className="absolute right-3 top-2/10 transform -translate-y-1/2 cursor-pointer">
                     {seeCoPassword ? (<i class="fa-solid fa-eye"></i>) : <i class="fa-regular fa-eye-slash"></i>}
 
                 </button>
@@ -95,11 +104,23 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
             </div>
 
             <button 
-            onClick={handleRegister}
+            type="submit"
             className={`w-full py-3 pl-5 pr-10 bg-amber-500 rounded-full font-semibold hover:bg-amber-600 hover:scale-105 transition duration-300 cursor-pointer
             duration-600 opacity-100 delay-50 ${active ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0" }`}>
                 Register
             </button>
+                {message && (
+                <p className={`mt-3 text-center text-m
+                ${messageType === "success" ? "text-green-700 font-semibold" : "text-red-600 font-semibold"}`}>
+
+                    {messageType === "success" ? (
+                     <span className="text-lg">🎉</span>
+                    ):(
+                    <i className="fa-solid fa-exclamation-circle"></i>)}
+                    {message}
+                </p>
+            )}
+            
         </form>
     </div>
  )

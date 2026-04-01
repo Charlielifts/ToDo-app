@@ -16,6 +16,7 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/api", protectedRoutes);
 
+
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });

@@ -1,5 +1,5 @@
 
-const TogglePanel = ({ active, setActive }) => {
+const TogglePanel = ({ active, setActive, setMessageType, setMessage, setUsername, setPassword }) => {
     return(
         
         <div className="absolute w-full h-full overflow-hidden">
@@ -33,7 +33,13 @@ const TogglePanel = ({ active, setActive }) => {
                     Already have an account?
                 </p>
 
-                <button onClick={() => setActive(true)} className={`border border-white hover:bg-transparent hover:scale-105 transtion-all duration-1500
+                <button onClick={() => {
+                setActive(true) 
+                setMessage("") 
+                setMessageType("")
+                setUsername("")
+                setPassword("")
+                }}className={`border border-white hover:bg-transparent hover:scale-105 transtion-all duration-1500
                 ease-in-out py-2 px-6 w-60 rounded-full cursor-pointer
                 ${active ? "-translate-x-full opacity-0" : "translate-x-0 "}`}>
                     Register
@@ -43,7 +49,7 @@ const TogglePanel = ({ active, setActive }) => {
             <div className={`absolute right-0 w-1/2 h-full flex flex-col justify-center items-center text-white z-30
                 bg-transparent rounded-l-[150px] cursor-default 
                 transition-all duration-1500 ease-in-out delay-500
-             ${active ? "right-[0%]  " : "right-[-100%]"}`}>
+                ${active ? "right-[0%]  " : "right-[-100%]"}`}>
                 
                 <h1 className={`text-3xl font-pacifico mb-4 cursor-default
                 transition-all duration-1500 delay-300 duration-out-300
@@ -56,7 +62,13 @@ const TogglePanel = ({ active, setActive }) => {
                     Already have an account?
                 </p>
 
-                <button onClick={() => setActive(false)} className={`border border-white hover:bg-transparent hover:scale-105 transtion duration-100 py-2 px-6 w-60 rounded-full cursor-pointer
+                <button onClick={() => {
+                setActive(false) 
+                setMessage("") 
+                setMessageType("")
+                setUsername("")
+                setPassword("")
+                }} className={`border border-white hover:bg-transparent hover:scale-105 transtion duration-100 py-2 px-6 w-60 rounded-full cursor-pointer
                     transition-all duration-1500 delay-200 duration-out-300
                 ${active ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}>
                     Log in
