@@ -96,7 +96,7 @@ const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, 
                 />
 
                 <button type="button" onClick={() => setSeeCoPassword(prev => !prev)}
-                    className="absolute right-3 top-2/10 transform -translate-y-1/2 cursor-pointer">
+                    className="absolute right-3 top-5/10 transform -translate-y-1/2 cursor-pointer">
                     {seeCoPassword ? (<i class="fa-solid fa-eye"></i>) : <i class="fa-regular fa-eye-slash"></i>}
 
                 </button>

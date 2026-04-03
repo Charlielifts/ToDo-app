@@ -29,7 +29,7 @@ return (
             active={active} 
             showPassword={showPassword} setShowPassword={setShowPassword} 
             seeCoPassword={seeCoPassword} setSeeCoPassword={setSeeCoPassword}
-            messageType={messageType}  setMessageType={messageType} 
+            messageType={messageType} setMessageType={setMessageType} 
             message={message} setMessage={setMessage}
             username={username} setUsername={setUsername}
             password={password} setPassword={setPassword}    

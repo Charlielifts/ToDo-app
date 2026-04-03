@@ -9,14 +9,18 @@ export const registerController = async (req, res) => {
 
     try {
         //fill up fields
-        const{ username, email, password, } = req.body
         if (!username || !email || !password) {
             return res.status(400).json({message: "Please fill up all the following fields"});
         }
         
         //check user
-        const existingUser = await finduserByEmail(email);
+        const existingUser = await finduserByUsername(username);
         if (existingUser) {
+            return res.status(400).json({ message: "Username already exist. Please choose another"});
+        }
+
+        const existingEmail = await finduserByEmail(email);
+        if (existingEmail) {
             return res.status(400).json({ message: "Email already exist"});
         }
 

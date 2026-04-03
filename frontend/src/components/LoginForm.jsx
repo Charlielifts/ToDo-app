@@ -1,9 +1,10 @@
-import axios from "axios"
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Loginform = ({active, showPassword, setShowPassword, messageType, setMessageType, message, setMessage, username, setUsername, password, setPassword}) => {
 
-
-
+    const navigate = useNavigate();
+    
     const handlelogin = async (e) => {
         e.preventDefault();
 
@@ -12,14 +13,20 @@ const Loginform = ({active, showPassword, setShowPassword, messageType, setMessa
             username,
             password,
             });
-            console.log(res.data);
+            const token = res.data.token;
+            localStorage.setItem("token", token);
+            setMessage("Login successful" );
             setMessageType("success");
             setUsername("");
             setPassword("");
             console.log("MESSAGE SET:", res.data.message);
+
+            setTimeout(() => {
+                navigate("/todo");
+            }, 1000);
         } catch (err) {
             console.error(err.response?.data || err.message);
-            setMessage(err.response?.data?.message || "Something went wrong");
+            setMessage(err.response?.data?.message || "Login failed. Please try again.");
             setMessageType("error");
         }
     };
@@ -28,7 +35,7 @@ const Loginform = ({active, showPassword, setShowPassword, messageType, setMessa
   return(
         <div className={`absolute right-0 w-1/2 h-full flex items-center text-center p-15 z-30
         transition-all duration-600 delay-200
-        ${active ? "`translate-x-full opacity-0" : "translate-x-0 opacity-100"}`}>
+        ${active ? "translate-x-full opacity-0" : "translate-x-0 opacity-100"}`}>
             <form className="w-full" onSubmit={handlelogin} >
                     <h1 className={`text-2xl font-Gummy font-bold mb-6 cursor-default
                     transition-all duration-600 opacity-100 delay-200 ${active ? "translate-x-full opacity-0" : "translate-x-0 opacity-100" }`}>
