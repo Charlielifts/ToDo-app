@@ -1,11 +1,9 @@
 import axios from "axios";
-import { useState } from "react";
 
 const Registerform = ({active, showPassword, setShowPassword, setSeeCoPassword, seeCoPassword, messageType, setMessageType, 
-     message, setMessage, username, setUsername, password, setPassword}) => {
+     message, setMessage, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword, email, setEmail}) => {
 
-    const [email, setEmail] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+
     
 
     const handleRegister = async (e) => {
