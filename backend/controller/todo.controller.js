@@ -3,12 +3,14 @@ import { getTodos, postTodos, putTodos, deleteTodos } from "../model/todo.model.
 
 export const getTodoController = async (req, res) => {
     
-    const todoList = await getTodos()
+    const userId = req.user.id;
+    const todoList = await getTodos(userId);
     return res.json(todoList);
 }
 export const postTodoController = async (req, res) => {
     const { text } = req.body
-    const addTodo = await postTodos(text)
+    const userId = req.user.id;
+    const addTodo = await postTodos(text, userId)
     return res.json(addTodo);
 }
 export const putTodoController = async (req, res) => {

@@ -5,13 +5,20 @@ const Todo = () => {
   const [todos, setTodos] = useState([])
   const [input, setInput] = useState("")
 
+  
+  const token = localStorage.getItem("token")
+
   useEffect(() => {
     fetchTodos()
   }, [])
 
   const fetchTodos = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/todos")
+      const res = await axios.get("http://localhost:5000/todos", {
+      headers: {
+      Authorization: `Bearer ${token}`
+      }
+    });
       setTodos(res.data)
     } catch (err) {
       console.error(err)
@@ -21,9 +28,13 @@ const Todo = () => {
   const addTodo = async () => {
     if (input.trim()) {
       try {
-        const res = await axios.post("http://localhost:5000/todos", {
-          text: input
-        })
+        const res = await axios.post("http://localhost:5000/todos",
+          { text: input }, {
+      headers: {
+      Authorization: `Bearer ${token}`
+      }
+      });
+       
         setTodos([res.data, ...todos])
         setInput("")
       } catch (err) {
@@ -71,7 +82,12 @@ const Todo = () => {
                         onChange={async () => {
                           await axios.put(`http://localhost:5000/todos/${todo["number of list"]}`, {
                             completed: !todo.completed
-                          })
+                          } , {
+                             headers: {
+                              Authorization: `Bearer ${token}`
+                            }
+                            }
+                          );    
                           fetchTodos()
                         }}
                         className="mr-2 sm:mr-2 h-4 sm:h-5 w-4 sm:w-5 text-gray-600 cursor-pointer"
@@ -82,7 +98,11 @@ const Todo = () => {
                             {todo["todo list"]}
                         </span>
 
-                        <button onClick={async () => { await axios.delete(`http://localhost:5000/todos/${todo["number of list"]}`) 
+                        <button onClick={async () => { await axios.delete(`http://localhost:5000/todos/${todo["number of list"]}`, {
+                              headers: {
+                            Authorization: `Bearer ${token}`
+                              }
+                            });  
                               fetchTodos()
                               }} className="cursor-pointer">
                              <div className="bg-transparent hover:opacity-75 text-black p-2 rounded-full transition-opacity duration-200">
