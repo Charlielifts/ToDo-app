@@ -1,7 +1,7 @@
 import { useState } from "react";
-import LoginForm from "../components/LoginForm";
-import RegisterForm from "../components/RegisterForm";
-import TogglePanel from "../components/togglepanel";
+import LoginForm from "../components/login/LoginForm";
+import RegisterForm from "../components/login/RegisterForm";
+import TogglePanel from "../components/login/togglepanel";
 
 const Login = () => {
 

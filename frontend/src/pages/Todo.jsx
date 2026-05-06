@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 
+import TodoInput from "../components/todo/TodoInput"
 const Todo = () => {
   const [todos, setTodos] = useState([])
   const [input, setInput] = useState("")
@@ -49,25 +50,7 @@ const Todo = () => {
       <div className="bg-white shadow-lg rounded-[2vw] p-4 sm:p-8 md:p-12 lg:p-16 w-full max-w-5xl">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center cursor-default text-gray-900 mb-6">ToDo LIST<i className="fa-solid fa-bars-progress"></i></h1>
       
-        <div className="flex items-center my-7 bg-gray-200 rounded-full">
-            
-            <input
-            value={input}
-            onChange={ (e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-            if (e.key === "Enter") addTodo()
-            }}
-            className='bg-transparent rounded-full outline-none flex-1 h-12 sm:h-14 pl-4 sm:pl-6 pr-2 placeholder:text-slate-600 font-semibold text-sm sm:text-base'
-            type="text"
-            placeholder='Add new task'/>
-            
-           <button onClick={addTodo}
-             className='border-none rounded-full bg-amber-600 w-24 sm:w-28 md:w-32 h-12 sm:h-14 text-white text-sm sm:text-base md:text-lg
-             font-medium cursor-pointer transform transition-transform duration-200 hover:scale-110'
-             >ADD<i className="fa-solid fa-plus"></i>
-
-            </button>
-        </div>
+        <TodoInput input={input} setInput={setInput} addTodo={addTodo} />
 
         <ul className="">
             {

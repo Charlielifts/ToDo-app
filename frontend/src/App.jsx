@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login.jsx";
-import Todo from "./components/Todo.jsx";
+import Todo from "./pages/Todo.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
 function App() {
